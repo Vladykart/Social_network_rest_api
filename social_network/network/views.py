@@ -2,7 +2,6 @@
 # from rest_framework_tracking.mixins import LoggingMixin
 from django.shortcuts import get_object_or_404
 
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,15 +9,12 @@ from rest_framework import status
 from django.db.models import DateField, Count, Sum
 from django.db.models.functions import Cast
 
-
-
 from .likes.like_serializers import PostLikeSerializerUpdate, PostLikeSerializer, PostLikeSerializerCreate, \
     PostLikeSerializerAnalytics
 from .models import Post, PostLike, User
 
 from .serializers import UserSerializer, PostSerializer, PostSerializerCreate, PostSerializerUpdate, \
     UserSerializerLogin, UserSerializerCreate, UserSerializerUpdate
-
 
 
 # users
@@ -202,7 +198,6 @@ class PostLikeAnalytics(APIView):
         View filtered liked posts
         """
 
-        print()
         query = PostLike.objects.filter(
             created__gte=date_from,
             created__lte=date_to
@@ -211,5 +206,5 @@ class PostLikeAnalytics(APIView):
         ).values('create_date', 'post_id').annotate(
             id_count=Sum('value')
         ).order_by('create_date')
-        print(query)
+
         return Response(PostLikeSerializerAnalytics(query, many=True).data)
